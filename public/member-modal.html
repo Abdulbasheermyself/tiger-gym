@@ -1,0 +1,25 @@
+<dialog id="member-modal" class="modal">
+  <form id="member-form" class="modal-card" method="dialog">
+    <div class="modal-head">
+      <div>
+        <p class="eyebrow">New member</p>
+        <h3>Add member with biometric ID</h3>
+      </div>
+      <button type="button" class="icon-btn" data-close="member-modal">×</button>
+    </div>
+    <div class="form-grid">
+      <label>Full name<input name="fullName" required></label>
+      <label>Phone<input name="phone" required></label>
+      <label>Emergency contact<input name="emergencyContact" required></label>
+      <label>Goal<input name="goal" required></label>
+      <label>Biometric ID<input name="biometricId" required placeholder="TG-1042"></label>
+      <label>Expiry date<input name="expiresAt" type="date" required></label>
+      <label>Plan<select name="planId" id="member-plan-select"><option value="">Loading plans...</option></select></label>
+      <label>Coach<select name="coachId" id="member-coach-select"><option value="">Loading coaches...</option></select></label>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="ghost-btn" data-close="member-modal">Cancel</button>
+      <button type="submit" class="primary-btn">Save Member</button>
+    </div>
+  </form>
+</dialog>

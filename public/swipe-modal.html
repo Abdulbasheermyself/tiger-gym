@@ -1,0 +1,19 @@
+<dialog id="swipe-modal" class="modal">
+  <form id="swipe-form" class="modal-card" method="dialog">
+    <div class="modal-head">
+      <div>
+        <p class="eyebrow">Testing tool</p>
+        <h3>Simulate biometric swipe</h3>
+      </div>
+      <button type="button" class="icon-btn" data-close="swipe-modal">×</button>
+    </div>
+    <div class="form-grid">
+      <label>Device<select name="deviceSerial" id="swipe-device-select"><option value="">Loading devices...</option></select></label>
+      <label>Biometric ID<input name="biometricId" required placeholder="TG-1001"></label>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="ghost-btn" data-close="swipe-modal">Cancel</button>
+      <button type="submit" class="primary-btn">Run Swipe</button>
+    </div>
+  </form>
+</dialog>

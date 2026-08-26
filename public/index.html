@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tiger Gym Live</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">TG</div>
+        <div>
+          <p class="eyebrow">Biometric Access Suite</p>
+          <h1>Tiger Gym Live</h1>
+        </div>
+      </div>
+
+      <nav class="nav-stack">
+        <button class="nav-link active" data-page="overview">Overview</button>
+        <button class="nav-link" data-page="members">Members</button>
+        <button class="nav-link" data-page="approvals">Approvals <span id="approval-badge" class="nav-badge" style="display:none;"></span></button>
+        <button class="nav-link" data-page="access">Access Control</button>
+        <button class="nav-link" data-page="devices">Devices</button>
+        <button class="nav-link" data-page="billing">Billing</button>
+        <button class="nav-link" data-page="expenses">Expenses</button>
+        <button class="nav-link" data-page="classes">Group Classes</button>
+        <button class="nav-link" data-page="workouts">Workouts</button>
+        <button class="nav-link" data-page="staff">Staff &amp; Permissions</button>
+      </nav>
+
+      <section class="system-card">
+        <p class="card-label">Door trigger mode</p>
+        <h3 id="door-mode">Simulation</h3>
+        <p id="door-mode-copy">No physical door relay active.</p>
+      </section>
+
+      <section class="system-card" id="staff-card">
+        <p class="card-label">Signed in as</p>
+        <h3 id="staff-name">—</h3>
+        <p id="staff-role">—</p>
+        <button id="logout-btn" class="ghost-btn danger-btn" style="margin-top:10px; width:100%;">Log out</button>
+      </section>
+    </aside>
+
+    <main class="main-panel">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Realtime biometric membership control</p>
+          <h2 id="page-title">Overview</h2>
+        </div>
+        <div class="topbar-actions">
+          <button id="open-member-modal" class="ghost-btn">Add Member</button>
+          <button id="open-payment-modal" class="ghost-btn">Log Payment</button>
+          <button id="open-swipe-modal" class="primary-btn">Simulate Swipe</button>
+        </div>
+      </header>
+
+      <section id="overview" class="page active">
+        <div class="hero-panel">
+          <div class="hero-copy">
+            <p class="hero-kicker">Tiger Gym</p>
+            <h3 id="hero-quote">"The only bad workout is the one that didn't happen."</h3>
+          </div>
+          <div id="registration-qr-panel" class="summary-card" style="display:grid; justify-items:center; text-align:center; gap:10px; align-content:start;">
+            <p class="card-label" style="margin:0;">New member?</p>
+            <div id="registration-qr" style="background:#fff; border-radius:14px; padding:10px; min-height:150px; display:flex; align-items:center; justify-content:center;">
+              <span style="color:#333; font-size:0.8rem;">Loading…</span>
+            </div>
+            <p style="margin:0; color:var(--muted); font-size:0.8rem;">Scan with your phone to register</p>
+          </div>
+          <div id="summary-grid" class="summary-grid"></div>
+        </div>
+
+        <div class="dashboard-grid">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="card-label">Realtime access</p>
+                <h3>Latest access decisions</h3>
+              </div>
+            </div>
+            <div id="access-feed" class="timeline-list"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="card-label">Today</p>
+                <h3>Attendance stream</h3>
+              </div>
+            </div>
+            <div id="attendance-feed" class="timeline-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="approvals" class="page">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">New member requests</p>
+            <h3>Submitted from the front-desk kiosk, waiting on a manager</h3>
+          </div>
+          <a class="ghost-btn" href="/welcome" target="_blank" rel="noopener">Open Kiosk Page ↗</a>
+        </div>
+        <div class="panel">
+          <div id="approval-list" class="stack-list"></div>
+        </div>
+      </section>
+
+      <section id="members" class="page">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Access-ready roster</p>
+            <h3>Members, biometric IDs, coaches and active expiry windows</h3>
+          </div>
+          <input id="member-search" type="search" placeholder="Search name, phone, biometric ID">
+        </div>
+        <div id="member-grid" class="member-grid"></div>
+      </section>
+
+      <section id="access" class="page">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Access control center</p>
+            <h3>Door decisions, denied attempts and simulated swipe testing</h3>
+          </div>
+        </div>
+        <div class="dashboard-grid">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="card-label">Decision log</p>
+                <h3>Granted and denied entries</h3>
+              </div>
+            </div>
+            <div id="access-log" class="timeline-list"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="card-label">Denied reasons</p>
+                <h3>Where to intervene</h3>
+              </div>
+            </div>
+            <div id="denied-summary" class="stack-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="devices" class="page">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Biometric devices</p>
+            <h3>Network, ADMS route, health checks and audit events</h3>
+          </div>
+          <button id="open-device-modal" class="ghost-btn">Add Device</button>
+        </div>
+        <div class="panel" id="adms-info-panel" style="margin-bottom:18px;">
+          <div class="panel-head">
+            <div>
+              <p class="card-label">Point your reader here</p>
+              <h3>ADMS server settings for a real ZKTeco device</h3>
+            </div>
+          </div>
+          <p>On the device: <strong>Comm &rarr; Ethernet &rarr; Cloud Server Setting (ADMS)</strong></p>
+          <div class="tag-row">
+            <span class="tag">Server Mode: ADMS / IP Mode</span>
+            <span class="tag">Server Address: <span id="adms-host-hint">this machine's LAN IP</span></span>
+            <span class="tag">Server Port: <span id="adms-port-hint">—</span></span>
+            <span class="tag">Enable Proxy Server: OFF</span>
+          </div>
+          <p style="margin-top:10px;">Once saved, the reader pushes every swipe straight to <code>/iclock/cdata</code> on this server — no polling, no manual sync. The device appears in the inventory below the moment it first checks in, and its IP address here stays in sync automatically since it can change on DHCP renewal.</p>
+        </div>
+        <div class="dashboard-grid">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="card-label">Device inventory</p>
+                <h3>Readers and routes</h3>
+              </div>
+            </div>
+            <div id="device-grid" class="device-grid"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="card-label">Device events</p>
+                <h3>Health and sync history</h3>
+              </div>
+            </div>
+            <div id="device-event-feed" class="timeline-list"></div>
+          </section>
+        </div>
+        <section class="panel" style="margin-top:18px;">
+          <div class="panel-head">
+            <div>
+              <p class="card-label">Needs enrollment</p>
+              <h3>Unmatched swipes</h3>
+            </div>
+          </div>
+          <div id="unmatched-list" class="stack-list"></div>
+        </section>
+      </section>
+
+      <section id="billing" class="page">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Collection board</p>
+            <h3>Renewals, receipts and package performance</h3>
+          </div>
+        </div>
+        <div class="dashboard-grid">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="card-label">Payments</p>
+                <h3>Recent receipts</h3>
+              </div>
+            </div>
+            <div id="payment-feed" class="stack-list"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="card-label">Plans</p>
+                <h3>Membership packages</h3>
+              </div>
+            </div>
+            <div id="plan-feed" class="stack-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="workouts" class="page">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Programming layer</p>
+            <h3>Keep training plans visible alongside membership operations</h3>
+          </div>
+        </div>
+        <div id="workout-board" class="workout-grid"></div>
+      </section>
+
+      <section id="expenses" class="page">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Business</p>
+            <h3>Track gym running costs</h3>
+          </div>
+          <button id="open-expense-modal" class="ghost-btn">Add Expense</button>
+        </div>
+        <div class="panel">
+          <div id="expense-list" class="stack-list"></div>
+        </div>
+      </section>
+
+      <section id="classes" class="page">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Programming</p>
+            <h3>Group classes and bookings</h3>
+          </div>
+          <button id="open-class-modal" class="ghost-btn">New Class</button>
+        </div>
+        <div id="class-grid" class="member-grid"></div>
+      </section>
+
+      <section id="staff" class="page">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Access control</p>
+            <h3>Staff logins and granular permissions</h3>
+          </div>
+          <button id="open-staff-modal" class="ghost-btn">New Operator</button>
+        </div>
+        <div class="panel">
+          <div id="staff-list" class="stack-list"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="modal-root"></div>
+
+  <div id="toast-root" class="toast-root"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

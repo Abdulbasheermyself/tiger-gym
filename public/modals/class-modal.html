@@ -1,0 +1,23 @@
+<dialog id="class-modal" class="modal">
+  <form id="class-form" class="modal-card" method="dialog">
+    <div class="modal-head">
+      <div>
+        <p class="eyebrow">New class</p>
+        <h3>Schedule a group class</h3>
+      </div>
+      <button type="button" class="icon-btn" data-close="class-modal">×</button>
+    </div>
+    <div class="form-grid">
+      <label>Class name<input name="name" required placeholder="Power Yoga"></label>
+      <label>Trainer<input name="trainer" placeholder="Coach Hiba"></label>
+      <label>Days<input name="days" placeholder="Mon, Wed, Fri"></label>
+      <label>Start time<input name="startTime" type="time"></label>
+      <label>Capacity<input name="capacity" type="number" min="1" value="20"></label>
+      <label>Description<input name="description" placeholder="Optional"></label>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="ghost-btn" data-close="class-modal">Cancel</button>
+      <button type="submit" class="primary-btn">Save Class</button>
+    </div>
+  </form>
+</dialog>

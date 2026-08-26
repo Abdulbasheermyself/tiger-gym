@@ -1,0 +1,20 @@
+<dialog id="map-biometric-modal" class="modal">
+  <form id="map-biometric-form" class="modal-card" method="dialog">
+    <div class="modal-head">
+      <div>
+        <p class="eyebrow">Enroll swipe</p>
+        <h3>Map this fingerprint ID to a member</h3>
+      </div>
+      <button type="button" class="icon-btn" data-close="map-biometric-modal">×</button>
+    </div>
+    <input type="hidden" name="biometricId" id="map-biometric-id">
+    <div class="form-grid">
+      <label>Biometric ID<input id="map-biometric-id-display" disabled></label>
+      <label>Assign to member<select name="memberId" id="map-member-select"><option value="">Loading members...</option></select></label>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="ghost-btn" data-close="map-biometric-modal">Cancel</button>
+      <button type="submit" class="primary-btn">Map to Member</button>
+    </div>
+  </form>
+</dialog>

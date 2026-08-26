@@ -1,0 +1,22 @@
+<dialog id="approve-modal" class="modal">
+  <form id="approve-form" class="modal-card" method="dialog">
+    <div class="modal-head">
+      <div>
+        <p class="eyebrow">Approve request</p>
+        <h3 id="approve-modal-name">Create membership</h3>
+      </div>
+      <button type="button" class="icon-btn" data-close="approve-modal">×</button>
+    </div>
+    <input type="hidden" name="requestId" id="approve-request-id">
+    <div class="form-grid">
+      <label>Biometric ID<input name="biometricId" id="approve-biometric-input" placeholder="e.g. TG-1042" required></label>
+      <label>Coach<select name="coachId" id="approve-coach-select" required><option value="">Loading coaches...</option></select></label>
+      <label>Membership expires<input name="expiresAt" type="date" id="approve-expires-input"></label>
+    </div>
+    <p class="hint-text" id="approve-biometric-hint">Assign the fingerprint ID from the reader (device swipe) or a temporary ID if the member hasn't scanned yet. Expiry defaults to today + the requested plan's duration. Override if needed.</p>
+    <div class="modal-actions">
+      <button type="button" class="ghost-btn" data-close="approve-modal">Cancel</button>
+      <button type="submit" class="primary-btn">Approve &amp; Create Member</button>
+    </div>
+  </form>
+</dialog>
