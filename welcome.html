@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome · Tiger Gym</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { overflow-y: auto; }
+    .kiosk-shell {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 32px 20px;
+    }
+    .kiosk-card {
+      width: 100%; max-width: 460px; background: var(--surface); border: 1px solid var(--line);
+      border-radius: 24px; padding: 36px 30px; box-shadow: var(--shadow); text-align: center;
+    }
+    .kiosk-card.form-mode { text-align: left; }
+    .kiosk-brand { display: flex; align-items: center; gap: 12px; justify-content: center; margin-bottom: 8px; }
+    .kiosk-brand h1 { font-family: "Space Grotesk", sans-serif; font-size: 1.3rem; margin: 0; }
+    .kiosk-pulse {
+      width: 84px; height: 84px; border-radius: 50%; margin: 24px auto 20px;
+      background: radial-gradient(circle, rgba(107,240,196,0.18), transparent 70%);
+      display: flex; align-items: center; justify-content: center; position: relative;
+    }
+    .kiosk-pulse::before, .kiosk-pulse::after {
+      content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--mint);
+      opacity: 0.5; animation: kiosk-ping 2.2s ease-out infinite;
+    }
+    .kiosk-pulse::after { animation-delay: 1.1s; }
+    @keyframes kiosk-ping { 0% { transform: scale(0.6); opacity: 0.6; } 100% { transform: scale(1.6); opacity: 0; } }
+    .kiosk-pulse span { font-size: 2rem; }
+    .kiosk-idle h2 { font-family: "Space Grotesk", sans-serif; font-size: 1.5rem; margin: 0 0 10px; }
+    .kiosk-idle p { color: var(--muted); font-size: 0.95rem; line-height: 1.6; margin: 0; }
+    .kiosk-form label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 14px; }
+    .kiosk-form input, .kiosk-form select { width: 100%; margin-top: 6px; padding: 11px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg-soft); color: var(--text); font-size: 0.95rem; }
+    .kiosk-pin-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(107,240,196,0.12); color: var(--mint); padding: 6px 14px; border-radius: 999px; font-size: 0.82rem; margin-bottom: 18px; }
+    .kiosk-submit { width: 100%; justify-content: center; margin-top: 6px; }
+    .kiosk-error { background: rgba(255,129,129,0.14); color: var(--danger); border: 1px solid rgba(255,129,129,0.3); border-left: 0; border-radius: 10px; padding: 10px 12px; font-size: 0.85rem; margin-bottom: 14px; display: none; }
+    .kiosk-success h2 { font-family: "Space Grotesk", sans-serif; font-size: 1.4rem; margin: 16px 0 10px; color: var(--mint); }
+    .kiosk-success p { color: var(--muted); font-size: 0.95rem; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <div class="kiosk-shell">
+    <div class="kiosk-card" id="kiosk-card">
+      <div class="kiosk-brand">
+        <div class="brand-mark">TG</div>
+        <h1>Tiger Gym</h1>
+      </div>
+
+      <div id="kiosk-idle" class="kiosk-idle">
+        <div class="kiosk-pulse"><span>👋</span></div>
+        <h2>Welcome!</h2>
+        <p>New here? Scan your fingerprint at the reader to get started — this screen will pick it up automatically and let you choose a membership.</p>
+      </div>
+
+      <div id="kiosk-form-wrap" style="display:none;">
+        <div class="kiosk-pin-badge">✓ Fingerprint captured — ID <span id="kiosk-pin-display"></span></div>
+        <div class="kiosk-error" id="kiosk-error"></div>
+        <form class="kiosk-form" id="kiosk-form">
+          <label>Full name*
+            <input name="fullName" required placeholder="Your name">
+          </label>
+          <label>Phone number*
+            <input name="phone" type="tel" required pattern="[0-9]{10}" maxlength="10" title="Enter a 10-digit mobile number" placeholder="10-digit mobile number">
+          </label>
+          <label>Email
+            <input name="email" type="email" placeholder="Optional">
+          </label>
+          <label>Fitness goal
+            <select name="goal">
+              <option>General Fitness</option>
+              <option>Weight Loss</option>
+              <option>Strength Training</option>
+              <option>Muscle Gain</option>
+              <option>Mobility & Recovery</option>
+              <option>Athletic Performance</option>
+            </select>
+          </label>
+          <label>Membership plan*
+            <select name="planId" id="kiosk-plan-select" required></select>
+          </label>
+          <label>Preferred coach
+            <select name="coachId" id="kiosk-coach-select">
+              <option value="">No preference</option>
+            </select>
+          </label>
+          <button type="submit" class="primary-btn kiosk-submit">Submit for Approval</button>
+        </form>
+      </div>
+
+      <div id="kiosk-success" style="display:none;" class="kiosk-success">
+        <div class="kiosk-pulse"><span>✅</span></div>
+        <h2>Request sent!</h2>
+        <p id="kiosk-success-message">Your membership request has been sent to the gym manager for approval. Please check in at the front desk.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io("/kiosk");
+    const idleEl = document.getElementById("kiosk-idle");
+    const formWrapEl = document.getElementById("kiosk-form-wrap");
+    const successEl = document.getElementById("kiosk-success");
+    const form = document.getElementById("kiosk-form");
+    const errorBox = document.getElementById("kiosk-error");
+    let currentBiometricId = null;
+    let currentDeviceSerial = null;
+    let resetTimer = null;
+
+    function showIdle() {
+      idleEl.style.display = "";
+      formWrapEl.style.display = "none";
+      successEl.style.display = "none";
+      document.getElementById("kiosk-card").classList.remove("form-mode");
+    }
+
+    function showForm(biometricId, deviceSerial) {
+      currentBiometricId = biometricId;
+      currentDeviceSerial = deviceSerial;
+      document.getElementById("kiosk-pin-display").textContent = biometricId;
+      idleEl.style.display = "none";
+      formWrapEl.style.display = "";
+      successEl.style.display = "none";
+      errorBox.style.display = "none";
+      form.reset();
+      document.getElementById("kiosk-card").classList.add("form-mode");
+    }
+
+    function showSuccess(message) {
+      idleEl.style.display = "none";
+      formWrapEl.style.display = "none";
+      successEl.style.display = "";
+      document.getElementById("kiosk-success-message").textContent = message;
+      document.getElementById("kiosk-card").classList.remove("form-mode");
+      clearTimeout(resetTimer);
+      resetTimer = setTimeout(showIdle, 8000);
+    }
+
+    socket.on("kiosk:new-swipe", (payload) => {
+      showForm(payload.biometricId, payload.deviceSerial);
+    });
+
+    async function loadOptions() {
+      const planSelect = document.getElementById("kiosk-plan-select");
+      const coachSelect = document.getElementById("kiosk-coach-select");
+
+      try {
+        const [plans, coaches] = await Promise.all([
+          fetch("/api/public/plans").then((r) => r.json()),
+          fetch("/api/public/coaches").then((r) => r.json())
+        ]);
+
+        planSelect.disabled = !plans.length;
+        planSelect.innerHTML = plans.length
+          ? plans.map((p) => `<option value="${p.id}">${p.name} · ₹${Number(p.price).toLocaleString("en-IN")} (${p.duration_days} days)</option>`).join("")
+          : '<option value="">No plans available</option>';
+
+        coachSelect.disabled = !coaches.length;
+        coachSelect.innerHTML = '<option value="">No preference</option>';
+        coaches.forEach((c) => {
+          const option = document.createElement("option");
+          option.value = c.id;
+          option.textContent = `${c.name} · ${c.specialty || ""}`;
+          coachSelect.appendChild(option);
+        });
+      } catch (error) {
+        planSelect.disabled = true;
+        coachSelect.disabled = true;
+        planSelect.innerHTML = '<option value="">No plans available</option>';
+        coachSelect.innerHTML = '<option value="">No coaches available</option>';
+      }
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      errorBox.style.display = "none";
+      const payload = Object.fromEntries(new FormData(form).entries());
+      payload.biometricId = currentBiometricId;
+      payload.deviceSerial = currentDeviceSerial;
+      try {
+        const response = await fetch("/api/public/membership-requests", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+        if (!response.ok) {
+          errorBox.textContent = result.detail || result.error || "Something went wrong. Please see the front desk.";
+          errorBox.style.display = "block";
+          return;
+        }
+        showSuccess(result.message || "Your request has been submitted.");
+      } catch (error) {
+        errorBox.textContent = "Could not reach the server. Please see the front desk.";
+        errorBox.style.display = "block";
+      }
+    });
+
+    loadOptions();
+    showIdle();
+  </script>
+</body>
+</html>
