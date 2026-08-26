@@ -1,0 +1,31 @@
+<dialog id="expense-modal" class="modal">
+  <form id="expense-form" class="modal-card" method="dialog">
+    <div class="modal-head">
+      <div>
+        <p class="eyebrow">New expense</p>
+        <h3>Log a running cost</h3>
+      </div>
+      <button type="button" class="icon-btn" data-close="expense-modal">×</button>
+    </div>
+    <div class="form-grid">
+      <label>Category
+        <select name="category">
+          <option>Rent</option>
+          <option>Equipment</option>
+          <option>Utilities</option>
+          <option>Salaries</option>
+          <option>Maintenance</option>
+          <option>Marketing</option>
+          <option>Other</option>
+        </select>
+      </label>
+      <label>Amount (₹)<input name="amount" type="number" min="1" required></label>
+      <label>Date<input name="expenseDate" type="date"></label>
+      <label>Description<input name="description" placeholder="Optional"></label>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="ghost-btn" data-close="expense-modal">Cancel</button>
+      <button type="submit" class="primary-btn">Save Expense</button>
+    </div>
+  </form>
+</dialog>

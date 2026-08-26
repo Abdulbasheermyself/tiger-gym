@@ -1,0 +1,28 @@
+<dialog id="payment-modal" class="modal">
+  <form id="payment-form" class="modal-card" method="dialog">
+    <div class="modal-head">
+      <div>
+        <p class="eyebrow">Payment</p>
+        <h3>Record collection</h3>
+      </div>
+      <button type="button" class="icon-btn" data-close="payment-modal">×</button>
+    </div>
+    <div class="form-grid">
+      <label>Member<select name="memberId" id="payment-member-select"><option value="">Loading members...</option></select></label>
+      <label>Amount<input name="amount" type="number" min="1" required></label>
+      <label>Method
+        <select name="method">
+          <option>UPI</option>
+          <option>Card</option>
+          <option>Cash</option>
+          <option>Bank Transfer</option>
+        </select>
+      </label>
+      <label>Notes<input name="notes" placeholder="Renewal / PT"></label>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="ghost-btn" data-close="payment-modal">Cancel</button>
+      <button type="submit" class="primary-btn">Save Payment</button>
+    </div>
+  </form>
+</dialog>

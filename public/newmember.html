@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tiger Gym — New Member Registration</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#07111f,#102a43,#0f766e);min-height:100vh;color:#fff}
+    .wrap{max-width:900px;margin:auto;padding:32px 18px 60px}
+    .top{text-align:center;margin-bottom:24px}
+    .logo{font-size:46px}
+    h1{margin:6px 0;font-size:34px}
+    .sub{color:#cbd5e1}
+    .card{background:rgba(255,255,255,.1);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.15);border-radius:22px;padding:25px;box-shadow:0 20px 60px rgba(0,0,0,.25);margin-bottom:20px}
+    .submit{border:0;border-radius:12px;padding:14px 22px;font-size:16px;font-weight:700;cursor:pointer;background:#facc15;color:#111827}
+    .submit:disabled{opacity:.55;cursor:not-allowed}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    label{display:block;font-size:13px;font-weight:700;color:#dbeafe;margin-bottom:7px}
+    input,select,textarea{width:100%;padding:13px;border:1px solid #cbd5e1;border-radius:10px;font-size:15px;background:#fff;color:#111827}
+    textarea{min-height:90px;resize:vertical}
+    .full{grid-column:1/-1}
+    .actions{display:flex;gap:12px;align-items:center;margin-top:18px;flex-wrap:wrap}
+    .secondary{background:#e2e8f0;color:#0f172a;border:0;border-radius:12px;padding:14px 22px;font-size:16px;font-weight:700;cursor:pointer}
+    .message{display:none;margin-top:18px;padding:14px;border-radius:12px;border-left:0}
+    .success{background:#dcfce7;color:#166534}
+    .error{background:#fee2e2;color:#991b1b}
+    .privacy{font-size:12px;color:#cbd5e1;line-height:1.5;margin-top:15px}
+    @media(max-width:650px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.wrap{padding-top:20px}h1{font-size:28px}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="logo">🐯</div>
+    <h1>New Member Registration</h1>
+    <div class="sub">Tiger Gym — fill in your details to request membership</div>
+  </div>
+
+  <div class="card">
+    <form id="registrationForm">
+      <div class="grid">
+        <div>
+          <label>Full Name *</label>
+          <input id="fullName" name="fullName" required placeholder="Enter full name">
+        </div>
+
+        <div>
+          <label>Phone *</label>
+          <input id="phone" name="phone" required inputmode="tel" pattern="[0-9]{10}" maxlength="10" title="Enter a 10-digit mobile number" placeholder="10-digit mobile number">
+        </div>
+
+        <div>
+          <label>Email</label>
+          <input id="email" name="email" type="email" placeholder="name@example.com">
+        </div>
+
+        <div>
+          <label>Fitness Goal *</label>
+          <select id="goal" name="goal" required>
+            <option value="">Select a goal</option>
+            <option>General Fitness</option>
+            <option>Weight Loss</option>
+            <option>Muscle Gain</option>
+            <option>Strength</option>
+            <option>Transformation</option>
+            <option>Mobility</option>
+            <option>Personal Training</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Membership Plan *</label>
+          <select id="planId" name="planId" required>
+            <option value="">Loading plans...</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Preferred Coach</label>
+          <select id="coachId" name="coachId">
+            <option value="">No preference</option>
+          </select>
+        </div>
+
+        <div class="full">
+          <label>Additional Information</label>
+          <textarea id="notes" name="notes" placeholder="Anything you'd like the gym team to know"></textarea>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="submit" id="submitBtn" type="submit">Register for Approval</button>
+        <button class="secondary" type="button" onclick="document.getElementById('registrationForm').reset()">Clear</button>
+      </div>
+
+      <div id="message" class="message"></div>
+      <div class="privacy">
+        Your registration request is sent to the Tiger Gym management system for approval.
+        A staff member will finish setting up your gym access (including your fingerprint ID) once approved.
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+async function loadOptions() {
+  try {
+    const [plansRes, coachesRes] = await Promise.all([
+      fetch("/api/public/plans"),
+      fetch("/api/public/coaches")
+    ]);
+
+    const plans = await plansRes.json();
+    const coaches = await coachesRes.json();
+
+    $("planId").disabled = !plans.length;
+    $("planId").innerHTML = '<option value="">Select a plan</option>' +
+      plans.map(p => `<option value="${p.id}">${escapeHtml(p.name)} — ₹${Number(p.price).toLocaleString("en-IN")} / ${p.duration_days} days</option>`).join("");
+
+    $("coachId").disabled = !coaches.length;
+    $("coachId").innerHTML = '<option value="">No preference</option>' +
+      coaches.map(c => `<option value="${c.id}">${escapeHtml(c.name)} — ${escapeHtml(c.specialty)}</option>`).join("");
+  } catch (e) {
+    $("planId").disabled = true;
+    $("coachId").disabled = true;
+    $("planId").innerHTML = '<option value="">No plans available</option>';
+    $("coachId").innerHTML = '<option value="">No coaches available</option>';
+    showMessage("Unable to load plans/coaches. Please contact the front desk.", true);
+  }
+}
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[ch]));
+}
+
+function showMessage(text, isError=false) {
+  const el = $("message");
+  el.textContent = text;
+  el.className = "message " + (isError ? "error" : "success");
+  el.style.display = "block";
+}
+
+$("registrationForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const submit = $("submitBtn");
+  submit.disabled = true;
+
+  const payload = {
+    fullName: $("fullName").value.trim(),
+    phone: $("phone").value.trim(),
+    email: $("email").value.trim(),
+    goal: $("goal").value,
+    planId: $("planId").value,
+    coachId: $("coachId").value || null,
+    notes: $("notes").value.trim()
+  };
+
+  try {
+    const response = await fetch("/api/public/membership-requests", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) throw new Error(data.detail || data.error || "Registration failed.");
+
+    showMessage(data.message || "Registration submitted successfully.");
+    $("registrationForm").reset();
+  } catch (e) {
+    showMessage(e.message, true);
+  } finally {
+    submit.disabled = false;
+  }
+});
+
+loadOptions();
+</script>
+</body>
+</html>

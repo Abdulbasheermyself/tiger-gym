@@ -1,0 +1,23 @@
+<dialog id="device-modal" class="modal">
+  <form id="device-form" class="modal-card" method="dialog">
+    <div class="modal-head">
+      <div>
+        <p class="eyebrow">New reader</p>
+        <h3>Register a biometric device</h3>
+      </div>
+      <button type="button" class="icon-btn" data-close="device-modal">×</button>
+    </div>
+    <div class="form-grid">
+      <label>Label<input name="label" required placeholder="Front Desk Reader"></label>
+      <label>Serial number<input name="serial" required placeholder="e.g. 6583154400429"></label>
+      <label>Model<input name="model" placeholder="ZKTeco X200"></label>
+      <label>MAC address<input name="macAddress" placeholder="00:17:61:10:1b:16"></label>
+      <label>IP address<input name="ipAddress" placeholder="192.168.1.201"></label>
+    </div>
+    <p class="hint-text">Serial number is what the device actually sends on every swipe, so it's the one field that must match exactly (see the device's <em>SysInfo &rarr; Device</em> screen). IP and MAC are for your reference and stay editable — IP updates itself automatically once the device is talking to this server.</p>
+    <div class="modal-actions">
+      <button type="button" class="ghost-btn" data-close="device-modal">Cancel</button>
+      <button type="submit" class="primary-btn">Save Device</button>
+    </div>
+  </form>
+</dialog>

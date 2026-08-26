@@ -1,0 +1,28 @@
+<dialog id="staff-modal" class="modal">
+  <form id="staff-form" class="modal-card" method="dialog">
+    <div class="modal-head">
+      <div>
+        <p class="eyebrow">New operator</p>
+        <h3>Add a staff login</h3>
+      </div>
+      <button type="button" class="icon-btn" data-close="staff-modal">×</button>
+    </div>
+    <div class="form-grid">
+      <label>Name<input name="name" required></label>
+      <label>Email<input name="email" type="email" required></label>
+      <label>Password<input name="password" type="password" required placeholder="Minimum 6 characters"></label>
+      <label>Role
+        <select name="role">
+          <option value="operator">Operator</option>
+          <option value="owner">Owner</option>
+        </select>
+      </label>
+    </div>
+    <p class="hint-text">Select access permissions</p>
+    <div class="perm-grid" id="staff-permission-grid"></div>
+    <div class="modal-actions">
+      <button type="button" class="ghost-btn" data-close="staff-modal">Cancel</button>
+      <button type="submit" class="primary-btn">Save Operator</button>
+    </div>
+  </form>
+</dialog>

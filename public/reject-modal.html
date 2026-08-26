@@ -1,0 +1,19 @@
+<dialog id="reject-modal" class="modal">
+  <form id="reject-form" class="modal-card" method="dialog">
+    <div class="modal-head">
+      <div>
+        <p class="eyebrow">Reject request</p>
+        <h3>Decline this application</h3>
+      </div>
+      <button type="button" class="icon-btn" data-close="reject-modal">×</button>
+    </div>
+    <input type="hidden" name="requestId" id="reject-request-id">
+    <div class="form-grid">
+      <label>Reason (optional)<input name="reason" placeholder="e.g. duplicate account, incomplete info"></label>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="ghost-btn" data-close="reject-modal">Cancel</button>
+      <button type="submit" class="primary-btn">Reject Request</button>
+    </div>
+  </form>
+</dialog>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log in · Tiger Gym Live</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .login-shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+    .login-card { width: 100%; max-width: 380px; background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 28px; box-shadow: var(--shadow); }
+    .login-brand { display: flex; align-items: center; gap: 12px; justify-content: center; margin-bottom: 22px; }
+    .login-brand h1 { font-family: "Space Grotesk", sans-serif; font-size: 1.3rem; margin: 0; }
+    .login-form label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 14px; }
+    .login-form input { width: 100%; margin-top: 6px; padding: 11px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg-soft); color: var(--text); }
+    .login-error { background: rgba(255, 129, 129, 0.14); color: var(--danger); border: 1px solid rgba(255,129,129,0.3); border-left: 0; border-radius: 10px; padding: 10px 12px; font-size: 0.85rem; margin-bottom: 14px; display: none; }
+    .login-hint { text-align: center; font-size: 0.78rem; color: var(--muted); margin-top: 16px; line-height: 1.6; }
+    .login-submit { width: 100%; justify-content: center; margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <div class="login-shell">
+    <div class="login-card">
+      <div class="login-brand">
+        <div class="brand-mark">TG</div>
+        <h1>Tiger Gym Live</h1>
+      </div>
+      <div class="login-error" id="login-error"></div>
+      <form class="login-form" id="login-form">
+        <label>Email
+          <input type="email" name="email" required autofocus placeholder="owner@tigergym.local">
+        </label>
+        <label>Password
+          <input type="password" name="password" required placeholder="••••••••">
+        </label>
+        <button type="submit" class="primary-btn login-submit">Log in</button>
+      </form>
+      <p class="login-hint">OWNER LOGIN<br>owner@tigergym.local / owner123<br>Fresh databases may instead use admin@tigergym.local / ChangeMe123!<br>(change this from Staff &amp; Permissions after first login)</p>
+    </div>
+  </div>
+  <script>
+    document.getElementById("login-form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const errorBox = document.getElementById("login-error");
+      errorBox.style.display = "none";
+      const payload = Object.fromEntries(new FormData(event.currentTarget).entries());
+      try {
+        const response = await fetch("/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+        if (!response.ok) {
+          errorBox.textContent = result.error || "Login failed";
+          errorBox.style.display = "block";
+          return;
+        }
+        window.location.href = "/";
+      } catch (error) {
+        errorBox.textContent = "Could not reach the server";
+        errorBox.style.display = "block";
+      }
+    });
+  </script>
+</body>
+</html>

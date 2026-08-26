@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Registration QR</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  * { box-sizing:border-box; }
+  body { margin:0; min-height:100vh; font-family:"Segoe UI",Arial,sans-serif; color:#ecf7f9;
+    background:linear-gradient(170deg,#071118,#0a171d 55%,#071118); display:flex; align-items:center; justify-content:center; padding:24px; }
+  .card { width:100%; max-width:340px; background:#0b1d26; border:1px solid rgba(160,208,223,.16); border-radius:20px; padding:26px; text-align:center; }
+  h1 { font-size:1.1rem; margin:0 0 4px; }
+  p { font-size:.8rem; color:#9ab; margin:0 0 18px; }
+  input { width:100%; padding:11px 12px; border-radius:10px; border:1px solid rgba(160,208,223,.16); background:#0d1f27; color:#ecf7f9; font-size:.95rem; margin-bottom:10px; text-align:center; }
+  button { width:100%; padding:13px; border:0; border-radius:12px; background:linear-gradient(135deg,#63f0c4,#4bb8ff); color:#031117; font-weight:700; font-size:.95rem; cursor:pointer; }
+  .qr-box { margin-top:18px; background:#fff; border-radius:14px; padding:16px; display:none; }
+  .qr-box.show { display:inline-block; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>Scan to Register</h1>
+    <p>Members scan this with their own phone to open the registration form.</p>
+    <input id="ip" placeholder="LAN IP, e.g. 192.168.1.42">
+    <button onclick="go()">Generate QR</button>
+    <div class="qr-box" id="box"><div id="qr"></div></div>
+  </div>
+<script>
+function go() {
+  const ip = document.getElementById('ip').value.trim();
+  if (!ip) { alert("Enter this computer's LAN IP (see the server's console output on startup)."); return; }
+  const url = `http://${ip}:4310/newmember`;
+  document.getElementById('qr').innerHTML = '';
+  new QRCode(document.getElementById('qr'), { text: url, width: 220, height: 220 });
+  document.getElementById('box').classList.add('show');
+}
+</script>
+</body>
+</html>
